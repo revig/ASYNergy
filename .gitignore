@@ -4,4 +4,5 @@
 .editorconfig
 .htmlhintrc
 config.codekit3
-dist/*
+dist/asynergy.js
+dist/asynergy.js.map

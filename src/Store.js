@@ -87,6 +87,13 @@ const store = {
                 }
                 
                 break;
+						
+              case 'radio':
+                if (paramsA[2] !== undefined) {
+                  el.checked = paramsA[2];
+                }
+                
+                break;
                 
               case 'select-multiple':
                 if (paramsA[1] !== undefined) {
@@ -145,10 +152,19 @@ const store = {
             let index;
             for (index = 0; index < this.transmissionEls.length; index++) {
                 const transmissionElIsCheckbox = this.transmissionEls[index].type === 'checkbox';
+							const transmissionElIsRadio = this.transmissionEls[index].type === 'radio';
                 const transmissionElIsMutable = this.transmissionEls[index].mutable >= 0;
+							
                 if (transmissionElIsCheckbox) {
                     const isChecked = this.transmissionEls[index].checked;
                     payload.transmissionElsData[this.transmissionEls[index].getAttribute('asyn:transmit')] = isChecked ? this.transmissionEls[index].value : 'false';
+							
+	              } else if (transmissionElIsRadio) {
+	                  const isChecked = this.transmissionEls[index].checked;
+	                  if (isChecked) {
+	                      payload.transmissionElsData[this.transmissionEls[index].getAttribute('asyn:transmit')] = this.transmissionEls[index].value;
+	                  }
+							
                 } else {
                     payload.transmissionElsData[this.transmissionEls[index].getAttribute('asyn:transmit')] = this.transmissionEls[index].tagName === 'INPUT' ? this.transmissionEls[index].value : this.transmissionEls[index].innerHTML;
 

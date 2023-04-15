@@ -37,6 +37,14 @@ export default {
                 } else {
                     directiveVal = directive.value;
                 }
+							
+                // GET RID OF THE MODEL PARAMETERS
+                compoundAttrVal = directive.value.search(/[\(]/);
+                
+                if (compoundAttrVal !== -1) {
+                  const dirVal = /^.+(?=(\())/.exec(directive.value);
+                  directiveVal = dirVal[0];
+                }
 
                 let mutableElem = document.querySelector(`[asyn\\:mutable=${directiveVal}]`);
 
@@ -45,11 +53,11 @@ export default {
                 let modelElem = document.querySelector(`[${attr}]`);
 
                 if (mutableElem !== null) {
-                  this.attachModelListener(el, directive, mutableElem, url, modelElem);
+                  this.attachModelListener(el, directive, mutableElem, url, modelElem, directiveVal);
                 } else {
                     mutableElem = document.querySelector(`[asyn\\:mutable^=${directiveVal}\\.]`);
                     if (mutableElem !== null) {
-                      this.attachModelListener(el, directive, mutableElem, url, modelElem);
+                      this.attachModelListener(el, directive, mutableElem, url, modelElem, directiveVal);
                     } else {
                         console.warn(
                         'ASYNergy: [asyn:model] is missing a corresponding [asyn:mutable] element.',
@@ -134,7 +142,7 @@ export default {
         isAgent = false;
     },
 
-    attachModelListener(el, directive, mutableEl, url, modelEl) {
+    attachModelListener(el, directive, mutableEl, url, modelEl, modelAttrVal) {
         const isLazy = directive.modifiers.includes('lazy');
 
         const debounceIf = (condition, callback, time) =>
@@ -152,7 +160,7 @@ export default {
           event = 'blur';
         }
 
-        let model = directive.value;
+        let model = modelAttrVal;
 
         // TODO check for trailing slashes
         const handlerURL = url + '/' + model;

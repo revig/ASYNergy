@@ -166,7 +166,7 @@ const store = {
 	                  }
 							
                 } else {
-                    payload.transmissionElsData[this.transmissionEls[index].getAttribute('asyn:transmit')] = this.transmissionEls[index].tagName === 'INPUT' ? this.transmissionEls[index].value : this.transmissionEls[index].innerHTML;
+                    payload.transmissionElsData[this.transmissionEls[index].getAttribute('asyn:transmit')] = (this.transmissionEls[index].tagName === 'INPUT') || (this.transmissionEls[index].tagName === 'TEXTAREA') || (this.transmissionEls[index].tagName === 'SELECT') ? this.transmissionEls[index].value : this.transmissionEls[index].innerHTML;
 
                     // REPLACE CHECKBOX MODEL VALUE WITH MUTABLE ELEMENT DATA
                     if (listenerType === 'checkbox' && transmissionElIsMutable) {

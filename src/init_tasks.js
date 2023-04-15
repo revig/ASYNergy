@@ -26,12 +26,11 @@ export default {
                     break;
                 }
 
-                // DOM.setInputValueFromModel(el, component)
-                // CHECK FOR COMPUND MODEL NAME, USE THE PREFIX TO CHECK
-                // IF THERE IS A CORRESPONDING MUTABLE ELEMENT
+                // CHECK FOR COMPUND MODEL ATTRIBUTE VALUE, USE THE PREFIX
+                // TO CHECK IF THERE IS A CORRESPONDING MUTABLE ELEMENT
                 let directiveVal = '';
-                let compoundName = directive.value.search(/[.]/);
-                if (compoundName !== -1) {
+                let compoundAttrVal = directive.value.search(/[.]/);
+                if (compoundAttrVal !== -1) {
                     const dirValPrefix = /^.+(?=(\.))/.exec(directive.value);
                     directiveVal = dirValPrefix[0];
                 } else {

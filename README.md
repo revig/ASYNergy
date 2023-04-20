@@ -5,6 +5,9 @@ and adopted from Livewire, but it is nowhere near as
 feature-rich as Livewire and doesn't claim to be on par with  
 Livewire. It is a framework for making network requests and  
 changing things on the page.     
+  
+ASYNergy's current state is pre-release/beta-release.  
+Bugs and unexpected behavior cannot be ruled out.  
 
 
 ### License

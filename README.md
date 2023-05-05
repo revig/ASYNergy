@@ -10,6 +10,12 @@ changing things on the page.
 | - |:-|
 
 
+## How to Use ASYNergy?
+
+Please visit the [ASYNergy Wiki](https://github.com/revig/ASYNergy/wiki) and [chapter ASYNergy of the revIgniter User Guide](https://revigniter.com/userGuide/libraries/asynergy.html)  
+to get started.  
+
+
 ### License
 For the license terms see the `LICENSE.txt` file.  
 

@@ -20,7 +20,7 @@ export default function () {
     });
 
 
-    store.registerHook('message.sent', (message, agent) => {
+    store.registerHook('message.sent', (agent, message) => {
         const actions = message.updateQueue
             .filter(action => {
               return action.type === 'callHandler';

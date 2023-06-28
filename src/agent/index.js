@@ -56,7 +56,7 @@ export default class {
       let sendMessage = () => {
         this.connection.action(this.messageInTransit);
 
-        store.callHook('message.sent', this.messageInTransit, this);
+        store.callHook('message.sent', this, this.messageInTransit);
 
         this.updateQueue = [];
       };

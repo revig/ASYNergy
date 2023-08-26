@@ -17,6 +17,7 @@ export default class {
         this.tearDownCallbacks = [];
         this.scopedListeners = new MessageBus();
         this.listeners = [];
+        store.callHook('agent.initialized', this);
     }
 
     on(event, callback) {
@@ -61,6 +62,20 @@ export default class {
         this.updateQueue = [];
       };
         sendMessage();
+    }
+
+    receiveMessage(message, payload) {
+      message.storeResponse(payload);
+
+        // This bit of logic ensures that if actions were queued while a request was
+        // out to the server, they are sent when the request comes back.
+        if (this.updateQueue.length > 0) {
+          this.fireMessage();
+        }
+    }
+    
+    doReplayResponse(event, agent, response) {
+      this.connection.handleResponse(event, agent, response);
     }
 
     walk(callback, callbackWhenNewComponentIsEncountered = el => { }) {

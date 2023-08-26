@@ -14,6 +14,7 @@ export default {
     'message.failed',
     'message.received',
     'message.processed',
+    'allMessages.processed',
 
     /**
      * Private Hooks

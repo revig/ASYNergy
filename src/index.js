@@ -5,7 +5,7 @@
 * inspired by and adopted from Livewire *
 * a framework for making network requests *
 * and changing things on the page *
-* Version 0.1.0 *
+* Version 0.2.0 *
 *
 * Author: Ralf Bitter, rabit@revigniter.com
 *

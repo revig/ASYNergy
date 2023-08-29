@@ -12,7 +12,7 @@ import Agent from './agent/index';
 
 export default {
 
-    initialize(el, url) {
+    initialize(el, url, reregisterEvl) {
         let isAgent = false;
         asynDirectives(el).all().forEach(directive => {
             let test;
@@ -70,13 +70,19 @@ export default {
             }
 
             case 'mutable':
+              if (reregisterEvl !== true) {
+
+                if ((typeof directive.el.innerHTML === "string") && (directive.el.innerHTML.search(/asyn:/)) !== -1) {
+                  store.mutableIncludesModel = true;
+                }
 
                 lcFunc = directive.lcFunction;
                 store.mutables.push(directive);
 
                 test = 'mutable';
                 isAgent = false;
-                break;
+              }
+            break;
 
             case 'transmit':
                 // CHECK IF ELEMENT IS A MUTABLE ELEMENT, NEEDED TO

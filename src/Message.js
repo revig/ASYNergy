@@ -13,4 +13,9 @@ export default class {
             }))
         };
     }
+
+    storeResponse(payload) {
+      return (this.response = payload);
+    }
+
 }

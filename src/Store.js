@@ -17,6 +17,7 @@ const store = {
     listeners: new MessageBus(),
     nodesSetToDisabled: [],
     nodesSetToReadOnly: [],
+    mutableIncludesModel: false,
 
     theAgents() {
       return Object.keys(this.agents).map(key => {
@@ -35,6 +36,12 @@ const store = {
     addAgent(agent) {
         this.agents.push(agent);
         return this.agents[this.agents.length - 1];
+    },
+
+    getAgentsByID(agentID) {
+      return this.agents.filter(agent => {
+        return agent.agentID === agentID;
+      });
     },
 
     tearDownAgents() {
@@ -151,6 +158,8 @@ const store = {
           if (this.transmissionEls[0] !== undefined) {
             let index;
             for (index = 0; index < this.transmissionEls.length; index++) {
+              if (this.transmissionEls[index].getAttribute('asyn:transmit') !== null) {
+
                 const transmissionElIsCheckbox = this.transmissionEls[index].type === 'checkbox';
 							const transmissionElIsRadio = this.transmissionEls[index].type === 'radio';
                 const transmissionElIsMutable = this.transmissionEls[index].mutable >= 0;
@@ -174,6 +183,7 @@ const store = {
                     }
 
                 }
+              }
             }
         }
         return payload;

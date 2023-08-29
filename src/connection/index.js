@@ -17,12 +17,66 @@ export default class Connection {
       this.actionType = '';
       this.modelSyncTimeout = 1000;
       this.isCustomEvent = undefined;
+			this.reregisterEvLis = false;
     }
+		
+		
+    onMessage(message, payload) {
+      message.agent.receiveMessage(message, payload);
+    }
+    
+    handleResponse(event, agent, responseObj, fetchedResponse) {
+      if (fetchedResponse !== true) {
+        this.event = event;
+        this.updateEl = agent.connection.updateEl;
+      };
+      
+      store.callHook('element.updating', this.updateEl, agent, event);
+
+      Object.values(responseObj.asynergyResponse).forEach(respItem => {
+        if (respItem.url !== undefined) {
+          location = respItem.url;
+          return;
+        }
+
+        if ((respItem.mutableVal === null) || (typeof(respItem.mutableVal) === "object") &&
+        (Object.keys(respItem.mutableVal).length === 0)) {
+          respItem.mutableVal = "";
+        }
+
+        if ((typeof respItem.mutableVal === "string") && (respItem.mutableVal.search(/asyn:/)) !== -1) {
+          this.reregisterEvLis = true;
+        }
+
+        this.updateEl.updated = 0;
+
+        this.updateMutablesByID(respItem);
+                
+        this.updateMutablesByAttrVal(respItem);
+                
+        if (this.updateEl.updated === 0) {
+          this.updateEl.innerHTML = respItem.mutableVal;
+        }
+                  
+        store.callHook('element.updated', this.updateEl, agent, this.event);
+                
+        this.syncModels(respItem);
+
+        store.callHook('message.processed', this.updateEl, agent, this.event);
+
+      });
+
+      if (this.reregisterEvLis === true) {
+        ASYNergy.reregisterEventListeners();
+      };
+
+    }
+		
 
     // FETCH COMPLETED ACTION //
-    completed_callback(updateEl) {
-      store.clearDisabledReadOnlyNodesArrays();
-			// store.callHook // allProcessed
+    completed_callback(msg) {
+			store.clearDisabledReadOnlyNodesArrays();
+			store.callHook('allMessages.processed', msg);
     }
     
 
@@ -93,50 +147,25 @@ export default class Connection {
         })   
         .then(response => {
             if (response.ok) {
-              store.callHook('element.updating', this.updateEl, message.agent, this.event);
 
               response.text().then(response => {
 
                 const responseObj = JSON.parse(response);
 
-                Object.values(responseObj.asynergyResponse).forEach(respItem => {
-                  if (respItem.url !== undefined) {
-                    location = respItem.url;
-                    return;
-                  }
-
-                  if ((respItem.mutableVal === null) || (typeof(respItem.mutableVal) === "object") &&
-                  (Object.keys(respItem.mutableVal).length === 0)) {
-                    respItem.mutableVal = "";
-                  }
-
-                  this.updateEl.updated = 0;
-
-                  this.updateMutablesByID(respItem);
+                this.onMessage(message, responseObj);
                 
-                  this.updateMutablesByAttrVal(respItem);
-
-                  if (this.updateEl.updated === 0) {
-                    this.updateEl.innerHTML = respItem.mutableVal;
-                  }
-                  
-                  store.callHook('element.updated', this.updateEl, message.agent, this.event);
+                const fetchedResponse = true;
                 
-                  this.syncModels(respItem);
+                this.handleResponse(event, message.agent, responseObj, fetchedResponse);
 
-                  store.callHook('message.processed', this.updateEl, message.agent, this.event);
-                  
-                }); // Object.values(responseObj).forEach(respItem => {
-                
+                this.callback(message);
 
               });
             }
         })
         
-        .then(this.callback(this.updateEl))
-        
         .catch((error) => {
-            console.error("Error:", error);
+            console.error(error);
           });
     }
     

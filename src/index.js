@@ -5,7 +5,7 @@
 * inspired by and adopted from Livewire *
 * a framework for making network requests *
 * and changing things on the page *
-* Version 0.1.0 *
+* Version 0.2.0 *
 *
 * Author: Ralf Bitter, rabit@revigniter.com
 *
@@ -18,6 +18,7 @@ import store from './Store';
 import Polling from './agent/Polling';
 import DisableForms from './agent/DisableForms';
 import LoadingStates from './agent/LoadingStates';
+import SyncBrowserHistory from './agent/SyncBrowserHistory';
 
 class ASYNergy {
     constructor() {
@@ -54,6 +55,16 @@ class ASYNergy {
         this.agents.tearDownAgents();
     }
 
+    reregisterEventListeners() {
+      const URL = this.URL !== '' ? this.URL : window.location.href;
+      const reregisterEvL = true;
+      const callBackFn = (el) => {
+          nodeInitializer.initialize(el, URL, reregisterEvL);
+      };
+      const bodyEl = document.body;
+      walkDOM(bodyEl, callBackFn);
+    }
+
     start() {
         // TODO check forms and handlerURL in init_tasks.js
       const URL = this.URL !== '' ? this.URL : window.location.href;
@@ -88,6 +99,7 @@ if (!window.ASYNergy) {
     window.ASYNergy = ASYNergy;
 }
 
+SyncBrowserHistory();
 LoadingStates();
 DisableForms();
 Polling();

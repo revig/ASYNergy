@@ -2,23 +2,25 @@ import store from '../Store';
 import Deferred from '../action/Deferred';
 
 export default class Connection {
-  constructor(URL, updateEl, modelAttrVal, modelEl, event) {
-        this.url = URL;
-        this.updateEl = updateEl;
-        // this.postKey = postKey;
-        this.modelAttrVal = modelAttrVal;
-        this.event = event;
-        this.action = this.ajax;
-        this.callback = this.completed_callback;
-        this.headers = '';
-      this.asynPayload = {};
-      this.mutablesData = [];
-      this.modelEl = modelEl;
-      this.actionType = '';
-      this.modelSyncTimeout = 1000;
-      this.isCustomEvent = undefined;
-			this.reregisterEvLis = false;
-    }
+	constructor(URL, updateEl, modelAttrVal, modelEl, event) {
+		this.url = URL;
+		this.updateEl = updateEl;
+		// this.postKey = postKey;
+		this.modelAttrVal = modelAttrVal;
+		this.event = event;
+		this.action = this.ajax;
+		this.callback = this.completed_callback;
+		this.headers = {};
+		this.options = {};
+		this.options.headers = this.headers;
+		this.asynPayload = {};
+		this.mutablesData = [];
+		this.modelEl = modelEl;
+		this.actionType = '';
+		this.modelSyncTimeout = 1000;
+		this.isCustomEvent = undefined;
+		this.reregisterEvLis = false;
+	}
 		
 		
     onMessage(message, payload) {
@@ -124,6 +126,8 @@ export default class Connection {
         
         this.asynPayload.isCustomEvent = message.updateQueue[0].isCustomEvent;
         this.isCustomEvent = this.asynPayload.isCustomEvent;
+				
+			 store.callHook('request', this.options, this.mutablesData, this.asynPayload.modelData);
 
         this.asynPayload = JSON.stringify(this.asynPayload);
 
@@ -137,7 +141,7 @@ export default class Connection {
                 'X-ASYNergy': true,
 
                 // SET CUSTOM HEADERS
-                ...(this.headers),
+                ...(this.options.headers),
 
                 // WE'LL SET THIS EXPLICITLY TO MITIGATE POTENTIAL
                 // INTERFERENCE FROM AD-BLOCKERS/ETC.

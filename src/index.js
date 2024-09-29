@@ -5,7 +5,7 @@
 * inspired by and adopted from Livewire *
 * a framework for making network requests *
 * and changing things on the page *
-* Version 0.2.0 *
+* Version 0.2.1 *
 *
 * Author: Ralf Bitter, rabit@revigniter.com
 *
@@ -22,7 +22,7 @@ import SyncBrowserHistory from './agent/SyncBrowserHistory';
 
 class ASYNergy {
     constructor() {
-      this.appVersion = '0.2.0';
+      this.appVersion = '0.2.1';
       this.agents = store;
       this.URL = '';
     }

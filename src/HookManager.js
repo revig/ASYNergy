@@ -1,29 +1,30 @@
 import MessageBus from './MessageBus';
 
 export default {
-  availableHooks: [
-    /**
-     * Public Hooks
-     */
-    'agent.initialized',
-    'element.initialized',
-    'element.updating',
-    'element.updated',
-    'element.removed',
-    'message.sent',
-    'message.failed',
-    'message.received',
-    'message.processed',
-    'allMessages.processed',
+	availableHooks: [
+		/**
+		* Public Hooks
+		*/
+		'agent.initialized',
+		'element.initialized',
+		'element.updating',
+		'element.updated',
+		'element.removed',
+		'message.sent',
+		'message.failed',
+		'message.received',
+		'message.processed',
+		'allMessages.processed',
+		'request',
 
-    /**
-     * Private Hooks
-     */
-    'interceptAsynModelSetValue',
-    'interceptAsynModelAttachListener',
-    'beforeReplaceState',
-    'beforePushState'
-  ],
+		/**
+		* Private Hooks
+		*/
+		'interceptAsynModelSetValue',
+		'interceptAsynModelAttachListener',
+		'beforeReplaceState',
+		'beforePushState'
+	],
 
   bus: new MessageBus(),
 

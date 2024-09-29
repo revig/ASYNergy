@@ -22,7 +22,7 @@ import SyncBrowserHistory from './agent/SyncBrowserHistory';
 
 class ASYNergy {
     constructor() {
-      this.appVersion = '1.0.0';
+      this.appVersion = '0.2.0';
       this.agents = store;
       this.URL = '';
     }

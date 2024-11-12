@@ -101,6 +101,13 @@ const store = {
                 }
                 
                 break;
+
+              case 'range':
+                if (paramsA[1] !== undefined) {
+                  el.value = paramsA[1];
+                }
+                
+                break;
                 
               case 'select-multiple':
                 if (paramsA[1] !== undefined) {

@@ -150,6 +150,36 @@ export default {
     attachModelListener(el, directive, mutableEl, url, modelEl, modelAttrVal) {
         const isLazy = directive.modifiers.includes('lazy');
 
+        //---------------------------------------
+        // Slider control directive to update the current value in real time
+        // without sending requests while the user moves the slider.
+        // Request is sent when the user releases the slider.
+        // Example: asyn:model.lazy="slider('displayValue','%')"
+        if (el.type === "range" && isLazy && directive.value.match(/\bdisplayValue\b/) !== null) {
+          let sliderElement = el;
+          let sliderValueElement = mutableEl;
+          let valUnit = '';
+
+          let directiveValues = directive.value;
+
+          // Regular expression pattern to match strings enclosed in single quotes
+          let regex = /'(.*?)'/g;
+
+          let matches = [];
+          let match;
+          while (match = regex.exec(directiveValues)) {
+            matches.push(match[1]);
+          }
+          if (matches[1] !== undefined) {
+            valUnit = matches[1];
+          }
+
+          sliderElement.oninput = () => {
+            sliderValueElement.innerHTML = sliderElement.value + valUnit;
+          }
+        };
+        //---------------------------------------
+
         const debounceIf = (condition, callback, time) =>
           condition ? directive.modelSyncDebounce(callback, time) : callback;
 
